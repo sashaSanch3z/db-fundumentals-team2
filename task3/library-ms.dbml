@@ -108,6 +108,16 @@ Table borrowings {
   }
 }
 
+Table borrowing_items {
+  borrowing_id int [ref: > borrowings.id]
+  book_copy_id int [ref: > book_copies.id]
+
+  indexes {
+    (borrowing_id, book_copy_id) [pk]
+  }
+  
+}
+
 
 Table reservation_statuses {
   id   int         [pk, increment]
@@ -122,16 +132,6 @@ Table reservations {
   book_copy_id     int       [null, ref: > book_copies.id]
   reservation_date timestamp [not null, default: 'now()']
   status_id        int       [ref: > reservation_statuses.id, not null]
-}
-
-Table reservation_items {
-  reservations_id   int [ref: > reservations.id]
-  books_id int [ref: > books.id]
-  reservation_amount int [not null, default: '1']
-
-    indexes {
-    (reservations_id, books_id) [pk]
-  }
 }
 
 
@@ -153,4 +153,3 @@ Table book_reviews {
     `rate BETWEEN 1 AND 5` [name: 'chk_rate']
   }
 }
-
